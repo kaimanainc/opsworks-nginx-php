@@ -1,0 +1,34 @@
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server ipv6only=on;
+        root /usr/share/nginx/html;
+        index index.php;
+
+        # Make site accessible from http://localhost/
+        server_name localhost;
+
+
+        location ~* (\.jpg|\.txt|\.png|\.jsp|\.htm|\.gif|\.ico|\.icon|\.pdf|\.xml|\.swf|\.css|\.html|\.cgi|\.js|\.pl|\.rdf)$ {
+                try_files $uri return 404;
+        }
+
+
+        location / {
+                try_files $uri $uri/ /index.php;
+        }
+
+        location ~ \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+
+        #       # With php5-cgi alone:
+        #       fastcgi_pass 127.0.0.1:9000;
+        #       # With php5-fpm:
+        #       fastcgi_pass unix:/var/run/php5-fpm.sock;
+                fastcgi_pass 127.0.0.1:9000;
+                fastcgi_read_timeout 120;
+                fastcgi_index index.php;
+                include fastcgi_params;
+        }
+
+}
