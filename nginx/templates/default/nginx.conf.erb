@@ -1,12 +1,15 @@
 user <%= node[:nginx][:user] %>;
 worker_processes  <%= node[:nginx][:worker_processes] %>;
-
+worker_rlimit_nofile 50000;
 error_log  <%= node[:nginx][:log_dir] %>/error.log;
 pid        /var/run/nginx.pid;
 
 events {
   worker_connections  <%= node[:nginx][:worker_connections] %>;
+  multi_accept on;
+  use epoll;
 }
+
 
 http {
   include       <%= node[:nginx][:dir] %>/mime.types;
@@ -35,10 +38,14 @@ http {
   <% end %>
 
   client_max_body_size <%= node[:nginx][:client_max_body_size] %>;
-  client_body_timeout 60;
+  client_body_timeout 30;
   client_header_timeout 10;
   large_client_header_buffers 4 16k;
   send_timeout 60;
+  
+  fastcgi_max_temp_file_size 0;
+  fastcgi_buffers 16 16k;
+  fastcgi_buffer_size 32k;
 
   server_names_hash_bucket_size <%= node[:nginx][:server_names_hash_bucket_size] %>;
 
