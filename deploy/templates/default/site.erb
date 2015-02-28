@@ -29,6 +29,7 @@ server {
                 fastcgi_read_timeout 120;
                 fastcgi_index index.php;
                 include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
         }
 
 }
