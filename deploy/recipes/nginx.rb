@@ -23,11 +23,8 @@ node[:deploy].each do |application, deploy|
     cookbook "nginx"
   end
   
-  file "/etc/nginx/sites-enabled/default" do
-  content "ssh_key"
-  user deploy[:user]
-  group deploy[:group]
-  mode 00600
+  file "/etc/nginx/sites-enabled/default.txt" do
+    content "ssh_key"
   end
   
 
