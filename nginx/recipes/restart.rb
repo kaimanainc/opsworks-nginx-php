@@ -1,6 +1,9 @@
- file "/etc/nginx/sites-enabled/default.txt" do
-    content "ssh_key"
+ template "/etc/nginx/sites-enabled/default" do
+    source "site.erb"
   end
+  
+  
+
   
   service "nginx" do
   service_name "nginx"
