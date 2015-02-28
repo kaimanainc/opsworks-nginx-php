@@ -4,7 +4,7 @@ default['php-fpm']['pid'] = "/var/run/php-fpm/php-fpm.pid"
 default['php-fpm']['error_log'] =  "/var/log/php-fpm/error.log"
 default['php-fpm']['log_level'] = "notice"
 default['php-fpm']['emergency_restart_threshold'] = 1
-default['php-fpm']['emergency_restart_interval'] = "1m"
+default['php-fpm']['emergency_restart_interval'] = "199m"
 default['php-fpm']['process_control_timeout'] = 30
 
 
