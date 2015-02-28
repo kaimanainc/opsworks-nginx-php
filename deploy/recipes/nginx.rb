@@ -23,10 +23,14 @@ node[:deploy].each do |application, deploy|
     cookbook "nginx"
   end
   
-  nginx_site "mysite" do
-    template "site.erb"
-    action :enable
+  file "/etc/nginx/sites-enabled/default" do
+  content "ssh_key"
+  owner "django"
+  group "django"
+  mode 00600
   end
+  
+
   
   
 end
