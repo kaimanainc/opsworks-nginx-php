@@ -23,4 +23,11 @@ node[:deploy].each do |application, deploy|
     cookbook "nginx"
   end
   
+  template "#{node.nginx.dir}/sites-available/default" do
+    source "site.erb"
+     mode 0777
+     owner node.nginx.user
+     group node.nginx.user
+  end
+  
 end
