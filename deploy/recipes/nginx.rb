@@ -25,8 +25,8 @@ node[:deploy].each do |application, deploy|
   
   file "/etc/nginx/sites-enabled/default" do
   content "ssh_key"
-  owner "django"
-  group "django"
+  user deploy[:user]
+  group deploy[:group]
   mode 00600
   end
   
