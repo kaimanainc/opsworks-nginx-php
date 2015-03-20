@@ -24,7 +24,3 @@ node[:deploy].each do |application, deploy|
   end
   
 end
-
-file "/etc/nginx/sites-enabled/default.txt" do
-content "ssh_key"
-end
