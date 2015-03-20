@@ -1,5 +1,5 @@
 user <%= node[:nginx][:user] %>;
-worker_processes  <%= node[:nginx][:worker_processes] %>;
+worker_processes  auto;
 worker_rlimit_nofile 50000;
 error_log  <%= node[:nginx][:log_dir] %>/error.log;
 pid        /var/run/nginx.pid;
@@ -15,7 +15,7 @@ http {
   include       <%= node[:nginx][:dir] %>/mime.types;
   default_type  application/octet-stream;
 
-  access_log	<%= node[:nginx][:log_dir] %>/access.log;
+  access_log off;
 
   sendfile on;
   tcp_nopush on;
@@ -54,7 +54,7 @@ http {
   server {
     listen 80 default_server;
     listen [::]:80 default_server ipv6only=on;
-    root /srv/www/test_app/current;
+    root /srv/www/test/current;
     index index.php;
 
     # Make site accessible from http://localhost/
