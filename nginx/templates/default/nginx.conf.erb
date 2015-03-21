@@ -50,15 +50,10 @@ http {
   server_names_hash_bucket_size <%= node[:nginx][:server_names_hash_bucket_size] %>;
 
   include <%= node[:nginx][:dir] %>/conf.d/*.conf;
-  
-  server {
-    listen 80 default_server;
-    listen [::]:80 default_server ipv6only=on;
-    root /srv/www/test/current;
+
+
     index index.php;
 
-    # Make site accessible from http://localhost/
-    server_name localhost;
 
     location / {
       try_files $uri $uri/ /index.php;
@@ -71,6 +66,28 @@ http {
       fastcgi_index index.php;
       include fastcgi_params;
       fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+    }
+    
+    
+  server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+    root /srv/www/test/current;
+
+
+    # Make site accessible from http://localhost/
+    server_name localhost;
+
+
+  }
+  
+  server {
+  	server_name o.whatever.com;
+    root   /usr/share/nginx/landing;
+
+
+    location ~* (\.jpg|\.png|\.gif|\.ico|\.xml|\.swf|\.css|\.htmls|\.cgi|\.js|\.pl|\.rdf)$ {
+      return 404;
     }
   }
 }
