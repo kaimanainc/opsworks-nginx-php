@@ -55,7 +55,15 @@ http {
     index index.php;
 
 
-    location / {
+   
+    
+    
+  server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+    root /srv/www/test/current;
+    
+     location / {
       try_files $uri $uri/ /index.php;
     }
 
@@ -67,12 +75,6 @@ http {
       include fastcgi_params;
       fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
     }
-    
-    
-  server {
-    listen 80 default_server;
-    listen [::]:80 default_server ipv6only=on;
-    root /srv/www/test/current;
 
 
     # Make site accessible from http://localhost/
