@@ -1,43 +1,40 @@
 user <%= node[:nginx][:user] %>;
 worker_processes  auto;
 worker_rlimit_nofile 50000;
-error_log  <%= node[:nginx][:log_dir] %>/error.log;
 pid        /var/run/nginx.pid;
 
 events {
-  worker_connections  <%= node[:nginx][:worker_connections] %>;
+  worker_connections  200000;
   multi_accept on;
   use epoll;
 }
 
-
 http {
-  include       <%= node[:nginx][:dir] %>/mime.types;
+
+  # include       <%= node[:nginx][:dir] %>/mime.types;
   default_type  application/octet-stream;
 
   access_log off;
+  error_log  <%= node[:nginx][:log_dir] %>/error.log;
 
   sendfile on;
   tcp_nopush on;
   tcp_nodelay on;
 
-  <% if node[:nginx][:keepalive] == "on" %>
   keepalive_requests 200;
-  keepalive_timeout  <%= node[:nginx][:keepalive_timeout] %>;
-  <% end %>
+  keepalive_timeout  40;
 
-  gzip  <%= node[:nginx][:gzip] %>;
-  gzip_static  <%= node[:nginx][:gzip_static] %>;
-  <% if node[:nginx][:gzip] == "on" %>
-  gzip_http_version <%= node[:nginx][:gzip_http_version] %>;
-  gzip_comp_level <%= node[:nginx][:gzip_comp_level] %>;
-  gzip_proxied <%= node[:nginx][:gzip_proxied] %>;
-  gzip_types <%= node[:nginx][:gzip_types].join(' ') %>;
-  gzip_vary <%= node[:nginx][:gzip_vary] %>;
-  gzip_disable "<%= node[:nginx][:gzip_disable] %>";
-  <% end %>
+  gzip  on;
+  gzip_disable "msie6";
 
-  client_max_body_size <%= node[:nginx][:client_max_body_size] %>;
+  gzip_vary on;
+  gzip_proxied any;
+  gzip_comp_level 9;
+  gzip_buffers 16 8k;
+  gzip_http_version 1.1;
+  gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+  # client_max_body_size <%= node[:nginx][:client_max_body_size] %>;
   client_body_timeout 30;
   client_header_timeout 10;
   large_client_header_buffers 4 16k;
@@ -49,15 +46,10 @@ http {
 
   server_names_hash_bucket_size <%= node[:nginx][:server_names_hash_bucket_size] %>;
 
-  include <%= node[:nginx][:dir] %>/conf.d/*.conf;
+  #include <%= node[:nginx][:dir] %>/conf.d/*.conf;
 
+  index index.php;
 
-    index index.php;
-
-
-   
-    
-    
   server {
     listen 80 default_server;
     listen [::]:80 default_server ipv6only=on;
@@ -79,14 +71,13 @@ http {
 
     # Make site accessible from http://localhost/
     server_name localhost;
-
-
   }
-  
-  server {
-  	server_name o.whatever.com;
-    root   /usr/share/nginx/landing;
 
+  # Subdomain  
+  server {
+    add_header X-Frame-Options SAMEORIGIN;
+    server_name o.whatever.com;
+    root /srv/www/test/current/site1;
 
     location ~* (\.jpg|\.png|\.gif|\.ico|\.xml|\.swf|\.css|\.htmls|\.cgi|\.js|\.pl|\.rdf)$ {
       return 404;
