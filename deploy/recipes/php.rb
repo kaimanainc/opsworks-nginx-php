@@ -24,5 +24,17 @@ node[:deploy].each do |application, deploy|
 end
 
  file = Chef::Util::FileEdit.new("/etc/monit/conf.d/opsworks-agent.monitrc")
- file.insert_line_if_no_match("/www.example.com/", "www.example.com")
+ file.insert_line_if_no_match("# NGINX Monitor", "# NGINX Monitor
+check process nginx with pidfile /var/run/nginx.pid
+  start program = "/etc/init.d/nginx start"
+  stop program  = "/etc/init.d/nginx stop"
+  group www-data # (for ubuntu, debian)
+
+# HHVM Monitor
+check process hhvm with pidfile /var/run/hhvm/pid
+  group hhvm
+  start program = "/etc/init.d/hhvm start"
+  stop program  = "/etc/init.d/hhvm stop"
+  if failed unixsocket /var/run/hhvm/hhvm.sock then restart
+  if 5 restarts with 5 cycles then timeout")
 file.write_file
