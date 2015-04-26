@@ -30,7 +30,7 @@ check process nginx with pidfile /var/run/nginx.pid
   group www-data
   start program = "/etc/init.d/nginx start"
   stop program  = "/etc/init.d/nginx stop"
-  if 2 restarts with 3 cycles then exec "/sbin/shutdown -h now"
+  if 3 restarts with 4 cycles then exec "/sbin/shutdown -h now"
 
 # HHVM Monitor
 check process hhvm with pidfile /var/run/hhvm/pid
@@ -38,7 +38,7 @@ check process hhvm with pidfile /var/run/hhvm/pid
   start program = "/etc/init.d/hhvm start"
   stop program  = "/etc/init.d/hhvm stop"
   if failed unixsocket /var/run/hhvm/hhvm.sock then restart
-  if 2 restarts with 3 cycles then exec "/sbin/shutdown -h now"')
+  if 3 restarts with 4 cycles then exec "/sbin/shutdown -h now"')
 file.write_file
 
 # Restart Monit
