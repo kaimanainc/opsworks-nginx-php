@@ -1,6 +1,4 @@
 include_recipe 'deploy'
-#include_recipe "mod_php5_apache2"
-#include_recipe "mod_php5_apache2::php"
 
 Chef::Log.debug("Running deploy/recipes/php.rb")
 
@@ -23,12 +21,16 @@ node[:deploy].each do |application, deploy|
   end
 end
 
- file = Chef::Util::FileEdit.new("/etc/monit/conf.d/opsworks-agent.monitrc")
- file.insert_line_if_no_match('# NGINX Monitor', '# NGINX Monitor
+# Add Nginx & HHVM to monit
+file = Chef::Util::FileEdit.new("/etc/monit/conf.d/opsworks-agent.monitrc")
+file.insert_line_if_no_match('# NGINX Monitor', '
+ 
+ # NGINX Monitor
 check process nginx with pidfile /var/run/nginx.pid
+  group www-data
   start program = "/etc/init.d/nginx start"
   stop program  = "/etc/init.d/nginx stop"
-  group www-data # (for ubuntu, debian)
+  if 2 restarts with 3 cycles then exec "/sbin/shutdown -h now"')
 
 # HHVM Monitor
 check process hhvm with pidfile /var/run/hhvm/pid
@@ -36,11 +38,10 @@ check process hhvm with pidfile /var/run/hhvm/pid
   start program = "/etc/init.d/hhvm start"
   stop program  = "/etc/init.d/hhvm stop"
   if failed unixsocket /var/run/hhvm/hhvm.sock then restart
-  if 5 restarts with 5 cycles then timeout')
+  if 2 restarts with 3 cycles then exec "/sbin/shutdown -h now"')
 file.write_file
 
-
-
+# Restart Monit
 service "monit" do
   supports :restart => true, :reload => true
   action :enable
