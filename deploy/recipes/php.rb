@@ -38,3 +38,7 @@ check process hhvm with pidfile /var/run/hhvm/pid
   if failed unixsocket /var/run/hhvm/hhvm.sock then restart
   if 5 restarts with 5 cycles then timeout')
 file.write_file
+
+service "monit" do
+  action :restart
+end
