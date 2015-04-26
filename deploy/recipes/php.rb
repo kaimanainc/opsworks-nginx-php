@@ -24,7 +24,7 @@ node[:deploy].each do |application, deploy|
 end
 
  file = Chef::Util::FileEdit.new("/etc/monit/conf.d/opsworks-agent.monitrc")
- file.insert_line_if_no_match('# NGINX Monitor", "# NGINX Monitor
+ file.insert_line_if_no_match('# NGINX Monitor', '# NGINX Monitor
 check process nginx with pidfile /var/run/nginx.pid
   start program = "/etc/init.d/nginx start"
   stop program  = "/etc/init.d/nginx stop"
