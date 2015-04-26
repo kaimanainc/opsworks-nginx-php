@@ -28,7 +28,7 @@ check process nginx with pidfile /var/run/nginx.pid
   group www-data
   start program = '/etc/init.d/nginx start'
   stop program  = '/etc/init.d/nginx stop'
-  if 2 restarts with 3 cycles then exec '/sbin/shutdown -h now'")
+  if 2 restarts with 3 cycles then exec '/sbin/shutdown -h now'
 
 # HHVM Monitor
 check process hhvm with pidfile /var/run/hhvm/pid
