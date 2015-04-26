@@ -22,3 +22,7 @@ node[:deploy].each do |application, deploy|
     app application
   end
 end
+
+ file = Chef::Util::FileEdit.new("/etc/monit/conf.d/opsworks-agent.monitrc")
+ file.insert_line_if_no_match("/www.example.com/", "www.example.com")
+file.write_file
