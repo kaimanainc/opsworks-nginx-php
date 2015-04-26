@@ -39,6 +39,9 @@ check process hhvm with pidfile /var/run/hhvm/pid
   if 5 restarts with 5 cycles then timeout')
 file.write_file
 
+
+
 service "monit" do
-  action :restart
-end
+  supports :restart => true, :reload => true
+  action :enable
+end 
