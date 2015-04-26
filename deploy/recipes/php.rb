@@ -23,7 +23,9 @@ end
 
 # Add Nginx & HHVM to monit
 file = Chef::Util::FileEdit.new("/etc/monit/conf.d/opsworks-agent.monitrc")
-file.insert_line_if_no_match("# NGINX Monitor", "# NGINX Monitor
+file.insert_line_if_no_match("# NGINX Monitor", "
+
+# NGINX Monitor
 check process nginx with pidfile /var/run/nginx.pid
   group www-data
   start program = '/etc/init.d/nginx start'
